@@ -1,0 +1,1619 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotlight 6. Module 2. Test</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --light-bg: #ecf0f1;
+            --dark-bg: #1a252f;
+            --text-light: #ecf0f1;
+            --text-dark: #2c3e50;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --radius: 12px;
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+        }
+        
+        .subtitle {
+            color: var(--secondary-color);
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+        
+        .instructions {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: var(--radius);
+            margin-bottom: 25px;
+            border-left: 4px solid var(--warning-color);
+        }
+        
+        .progress-container {
+            margin: 25px 0;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: var(--success-color);
+            width: 0%;
+            transition: var(--transition);
+        }
+        
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+        }
+        
+        .section {
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .section-title {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 15px;
+            border-radius: var(--radius);
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+        
+        .question {
+            background-color: #f8f9fa;
+            padding: 18px;
+            border-radius: var(--radius);
+            margin-bottom: 20px;
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+        
+        .question.active {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .question-number {
+            background-color: var(--secondary-color);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        
+        .question-text {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .options-container {
+            display: grid;
+            gap: 10px;
+        }
+        
+        .option {
+            padding: 14px 18px;
+            background-color: white;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid #ddd;
+            display: flex;
+            align-items: center;
+            min-height: 60px;
+        }
+        
+        .option:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        
+        .option.selected {
+            border-color: var(--secondary-color);
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+        
+        .option.correct {
+            border-color: var(--success-color);
+            background-color: rgba(46, 204, 113, 0.1);
+        }
+        
+        .option.incorrect {
+            border-color: var(--accent-color);
+            background-color: rgba(231, 76, 60, 0.1);
+        }
+        
+        .option-marker {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: #eee;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .option.selected .option-marker {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .option.correct .option-marker {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .option.incorrect .option-marker {
+            background-color: var(--accent-color);
+            color: white;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #ddd;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: var(--transition);
+            margin-bottom: 10px;
+        }
+        
+        .input-field:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 50px;
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        
+        .btn-secondary {
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #d5dbdb;
+            transform: translateY(-2px);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .results-container {
+            display: none;
+            margin-top: 30px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .results-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+            border-radius: var(--radius) var(--radius) 0 0;
+            text-align: center;
+        }
+        
+        .results-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 0 0 var(--radius) var(--radius);
+            box-shadow: var(--shadow);
+        }
+        
+        .score-display {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .score-number {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+            line-height: 1;
+        }
+        
+        .score-total {
+            font-size: 1.2rem;
+            color: var(--text-dark);
+        }
+        
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .result-item {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: var(--radius);
+            border-left: 4px solid var(--secondary-color);
+        }
+        
+        .result-item h4 {
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+        
+        .chart-container {
+            height: 200px;
+            margin: 30px 0;
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+        }
+        
+        .chart-bar {
+            flex: 1;
+            background-color: var(--secondary-color);
+            border-radius: 4px 4px 0 0;
+            min-height: 10px;
+            position: relative;
+            transition: height 1s ease;
+        }
+        
+        .chart-label {
+            position: absolute;
+            bottom: -25px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .feedback {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: var(--radius);
+            margin-top: 25px;
+            border-left: 4px solid var(--warning-color);
+        }
+        
+        .feedback h3 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .highlight {
+            background-color: #fffacd;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            .btn {
+                padding: 12px 20px;
+                font-size: 0.95rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .question-text {
+                font-size: 1rem;
+            }
+            
+            .option {
+                padding: 12px;
+            }
+            
+            .score-number {
+                font-size: 2.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Spotlight 6. Module 2. Test</h1>
+            <div class="subtitle">Интерактивная версия теста для мобильных устройств</div>
+        </header>
+        
+        <div class="instructions">
+            <p><strong>Инструкция:</strong> Пройдите все разделы теста, выбирая ответы нажатием на варианты. Все вопросы обязательны для заполнения. После завершения всех разделов нажмите кнопку "Показать результаты".</p>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text">
+                <span>Прогресс: <span id="progressText">0%</span></span>
+                <span id="completedCount">0 из 43 заданий</span>
+            </div>
+        </div>
+        
+        <!-- Раздел I: Choose the odd one -->
+        <div class="section" id="section1">
+            <div class="section-title">I. Choose the odd one (Выберите лишнее)</div>
+            
+            <div class="question" id="q1">
+                <div class="question-header">
+                    <div class="question-number">1</div>
+                    <div class="question-text">Выберите лишнее слово:</div>
+                </div>
+                <div class="options-container">
+                    <div class="option" data-question="1" data-option="1">
+                        <div class="option-marker">A</div>
+                        <div class="option-text">autumn</div>
+                    </div>
+                    <div class="option" data-question="1" data-option="2">
+                        <div class="option-marker">B</div>
+                        <div class="option-text">spring</div>
+                    </div>
+                    <div class="option" data-question="1" data-option="3">
+                        <div class="option-marker">C</div>
+                        <div class="option-text">study</div>
+                    </div>
+                    <div class="option" data-question="1" data-option="4">
+                        <div class="option-marker">D</div>
+                        <div class="option-text">winter</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" id="q2">
+                <div class="question-header">
+                    <div class="question-number">2</div>
+                    <div class="question-text">Выберите лишнее слово:</div>
+                </div>
+                <div class="options-container">
+                    <div class="option" data-question="2" data-option="1">
+                        <div class="option-marker">A</div>
+                        <div class="option-text">August</div>
+                    </div>
+                    <div class="option" data-question="2" data-option="2">
+                        <div class="option-marker">B</div>
+                        <div class="option-text">Thursday</div>
+                    </div>
+                    <div class="option" data-question="2" data-option="3">
+                        <div class="option-marker">C</div>
+                        <div class="option-text">May</div>
+                    </div>
+                    <div class="option" data-question="2" data-option="4">
+                        <div class="option-marker">D</div>
+                        <div class="option-text">October</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" id="q3">
+                <div class="question-header">
+                    <div class="question-number">3</div>
+                    <div class="question-text">Выберите лишнее слово:</div>
+                </div>
+                <div class="options-container">
+                    <div class="option" data-question="3" data-option="1">
+                        <div class="option-marker">A</div>
+                        <div class="option-text">study</div>
+                    </div>
+                    <div class="option" data-question="3" data-option="2">
+                        <div class="option-marker">B</div>
+                        <div class="option-text">living room</div>
+                    </div>
+                    <div class="option" data-question="3" data-option="3">
+                        <div class="option-marker">C</div>
+                        <div class="option-text">kitchen</div>
+                    </div>
+                    <div class="option" data-question="3" data-option="4">
+                        <div class="option-marker">D</div>
+                        <div class="option-text">bathroom</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" id="q4">
+                <div class="question-header">
+                    <div class="question-number">4</div>
+                    <div class="question-text">Выберите лишнее слово:</div>
+                </div>
+                <div class="options-container">
+                    <div class="option" data-question="4" data-option="1">
+                        <div class="option-marker">A</div>
+                        <div class="option-text">florist's</div>
+                    </div>
+                    <div class="option" data-question="4" data-option="2">
+                        <div class="option-marker">B</div>
+                        <div class="option-text">chemist's</div>
+                    </div>
+                    <div class="option" data-question="4" data-option="3">
+                        <div class="option-marker">C</div>
+                        <div class="option-text">newsagent's</div>
+                    </div>
+                    <div class="option" data-question="4" data-option="4">
+                        <div class="option-marker">D</div>
+                        <div class="option-text">ceiling</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" id="q5">
+                <div class="question-header">
+                    <div class="question-number">5</div>
+                    <div class="question-text">Выберите лишнее слово:</div>
+                </div>
+                <div class="options-container">
+                    <div class="option" data-question="5" data-option="1">
+                        <div class="option-marker">A</div>
+                        <div class="option-text">fifth</div>
+                    </div>
+                    <div class="option" data-question="5" data-option="2">
+                        <div class="option-marker">B</div>
+                        <div class="option-text">six</div>
+                    </div>
+                    <div class="option" data-question="5" data-option="3">
+                        <div class="option-marker">C</div>
+                        <div class="option-text">seventh</div>
+                    </div>
+                    <div class="option" data-question="5" data-option="4">
+                        <div class="option-marker">D</div>
+                        <div class="option-text">second</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Раздел II: Write the words -->
+        <div class="section" id="section2">
+            <div class="section-title">II. Write the words as in the example</div>
+            
+            <div class="question" id="q6">
+                <div class="question-header">
+                    <div class="question-number">6</div>
+                    <div class="question-text">Напишите 1<sup>st</sup> словами (как в примере: 2nd → second):</div>
+                </div>
+                <input type="text" class="input-field" id="input6" placeholder="Введите ответ...">
+            </div>
+            
+            <div class="question" id="q7">
+                <div class="question-header">
+                    <div class="question-number">7</div>
+                    <div class="question-text">Напишите 3<sup>rd</sup> словами:</div>
+                </div>
+                <input type="text" class="input-field" id="input7" placeholder="Введите ответ...">
+            </div>
+            
+            <div class="question" id="q8">
+                <div class="question-header">
+                    <div class="question-number">8</div>
+                    <div class="question-text">Напишите 7:00 словами:</div>
+                </div>
+                <input type="text" class="input-field" id="input8" placeholder="Введите ответ...">
+            </div>
+            
+            <div class="question" id="q9">
+                <div class="question-header">
+                    <div class="question-number">9</div>
+                    <div class="question-text">Напишите 10:45 словами:</div>
+                </div>
+                <input type="text" class="input-field" id="input9" placeholder="Введите ответ...">
+            </div>
+            
+            <div class="question" id="q10">
+                <div class="question-header">
+                    <div class="question-number">10</div>
+                    <div class="question-text">Напишите 4:30 словами:</div>
+                </div>
+                <input type="text" class="input-field" id="input10" placeholder="Введите ответ...">
+            </div>
+            
+            <div class="question" id="q11">
+                <div class="question-header">
+                    <div class="question-number">11</div>
+                    <div class="question-text">Напишите 2:15 словами:</div>
+                </div>
+                <input type="text" class="input-field" id="input11" placeholder="Введите ответ...">
+            </div>
+        </div>
+        
+        <!-- Раздел III: Underline the correct item -->
+        <div class="section" id="section3">
+            <div class="section-title">III. Underline the correct item (Выберите правильный вариант)</div>
+            
+            <div class="question" id="q12">
+                <div class="question-header">
+                    <div class="question-number">12</div>
+                    <div class="question-text">There aren't <span class="highlight">some/any</span> paintings on the wall.</div>
+                </div>
+                <div class="options-container">
+                    <div class="option" data-question="12" data-option="1">
+                        <div class="option-marker">A</div>
+                        <div class="option-text">some</div>
+                    </div>
+                    <div class="option" data-question="12" data-option="2">
+                        <div class="option-marker">B</div>
+                        <div class="option-text">any</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" id="q13">
+                <div class="question-header">
+                    <div class="question-number">13</div>
+                    <div class="question-text">There are <span class="highlight">any/some</span> cushions on the sofa.</div>
+                </div>
+                <div class="options-container">
+                    <div class="option" data-question="13" data-option="1">
+                        <div class="option-marker">A</div>
+                        <div class="option-text">any</div>
+                    </div>
+                    <div class="option" data-question="13" data-option="2">
+                        <div class="option-marker">B</div>
+                        <div class="option-text">some</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" id="q14">
+                <div class="question-header">
+                    <div class="question-number">14</div>
+                    <div class="question-text">Is there <span class="highlight">a/some</span> newsagent's?</div>
+                </div>
+                <div class="options-container">
+                    <div class="option" data-question="14" data-option="1">
+                        <div class="option-marker">A</div>
+                        <div class="option-text">a</div>
+                    </div>
+                    <div class="option" data-question="14" data-option="2">
+                        <div class="option-marker">B</div>
+                        <div class="option-text">some</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" id="q15">
+                <div class="question-header">
+                    <div class="question-number">15</div>
+                    <div class="question-text">There is <span class="highlight">any/a</span> wardrobe in the room.</div>
+                </div>
+                <div class="options-container">
+                    <div class="option" data-question="15" data-option="1">
+                        <div class="option-marker">A</div>
+                        <div class="option-text">any</div>
+                    </div>
+                    <div class="option" data-question="15" data-option="2">
+                        <div class="option-marker">B</div>
+                        <div class="option-text">a</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" id="q16">
+                <div class="question-header">
+                    <div class="question-number">16</div>
+                    <div class="question-text">There is <span class="highlight">a/an</span> fridge in the kitchen.</div>
+                </div>
+                <div class="options-container">
+                    <div class="option" data-question="16" data-option="1">
+                        <div class="option-marker">A</div>
+                        <div class="option-text">a</div>
+                    </div>
+                    <div class="option" data-question="16" data-option="2">
+                        <div class="option-marker">B</div>
+                        <div class="option-text">an</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Раздел IV: Complete with at, on, in -->
+        <div class="section" id="section4">
+            <div class="section-title">IV. Complete the sentences with at, on or in</div>
+            
+            <div class="question" id="q17">
+                <div class="question-header">
+                    <div class="question-number">17</div>
+                    <div class="question-text">They go to bed ........ 10:00 p.m.</div>
+                </div>
+                <div class="options-container">
+                    <div class="option" data-question="17" data-option="1">
+                        <div class="option-marker">A</div>
+                        <div class="option-text">at</div>
+                    </div>
+                    <div class="option" data-question="17" data-option="2">
+                        <div class="option-marker">B</div>
+                        <div class="option-text">on</div>
+                    </div>
+                    <div class="option" data-question="17" data-option="3">
+                        <div class="option-marker">C</div>
+                        <div class="option-text">in</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" id="q18">
+                <div class="question-header">
+                    <div class="question-number">18</div>
+                    <div class="question-text">I see my family ........ the weekend.</div>
+                </div>
+                <div class="options-container">
+                    <div class="option" data-question="18" data-option="1">
+                        <div class="option-marker">A</div>
+                        <div class="option-text">at</div>
+                    </div>
+                    <div class="option" data-question="18" data-option="2">
+                        <div class="option-marker">B</div>
+                        <div class="option-text">on</div>
+                    </div>
+                    <div class="option" data-question="18" data-option="3">
+                        <div class="option-marker">C</div>
+                        <div class="option-text">in</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" id="q19">
+                <div class="question-header">
+                    <div class="question-number">19</div>
+                    <div class="question-text">We play football ....... Sundays.</div>
+                </div>
+                <div class="options-container">
+                    <div class="option" data-question="19" data-option="1">
+                        <div class="option-marker">A</div>
+                        <div class="option-text">at</div>
+                    </div>
+                    <div class="option" data-question="19" data-option="2">
+                        <div class="option-marker">B</div>
+                        <div class="option-text">on</div>
+                    </div>
+                    <div class="option" data-question="19" data-option="3">
+                        <div class="option-marker">C</div>
+                        <div class="option-text">in</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" id="q20">
+                <div class="question-header">
+                    <div class="question-number">20</div>
+                    <div class="question-text">Helen's birthday is ........ October.</div>
+                </div>
+                <div class="options-container">
+                    <div class="option" data-question="20" data-option="1">
+                        <div class="option-marker">A</div>
+                        <div class="option-text">at</div>
+                    </div>
+                    <div class="option" data-question="20" data-option="2">
+                        <div class="option-marker">B</div>
+                        <div class="option-text">on</div>
+                    </div>
+                    <div class="option" data-question="20" data-option="3">
+                        <div class="option-marker">C</div>
+                        <div class="option-text">in</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" id="q21">
+                <div class="question-header">
+                    <div class="question-number">21</div>
+                    <div class="question-text">My sister wakes up at 7 o'clock ....... the morning.</div>
+                </div>
+                <div class="options-container">
+                    <div class="option" data-question="21" data-option="1">
+                        <div class="option-marker">A</div>
+                        <div class="option-text">at</div>
+                    </div>
+                    <div class="option" data-question="21" data-option="2">
+                        <div class="option-marker">B</div>
+                        <div class="option-text">on</div>
+                    </div>
+                    <div class="option" data-question="21" data-option="3">
+                        <div class="option-marker">C</div>
+                        <div class="option-text">in</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Раздел V: Choose the correct item -->
+        <div class="section" id="section5">
+            <div class="section-title">V. Choose the correct item</div>
+            
+            <div class="question" id="q22">
+                <div class="question-header">
+                    <div class="question-number">22</div>
+                    <div class="question-text">Our house is ......... the bank and the toy shop.</div>
+                </div>
+                <div class="options-container">
+                    <div class="option" data-question="22" data-option="1">
+                        <div class="option-marker">A</div>
+                        <div class="option-text">under</div>
+                    </div>
+                    <div class="option" data-question="22" data-option="2">
+                        <div class="option-marker">B</div>
+                        <div class="option-text">between</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" id="q23">
+                <div class="question-header">
+                    <div class="question-number">23</div>
+                    <div class="question-text">«Where's the newspaper?» «It's ........ the table.»</div>
+                </div>
+                <div class="options-container">
+                    <div class="option" data-question="23" data-option="1">
+                        <div class="option-marker">A</div>
+                        <div class="option-text">on</div>
+                    </div>
+                    <div class="option" data-question="23" data-option="2">
+                        <div class="option-marker">B</div>
+                        <div class="option-text">behind</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" id="q24">
+                <div class="question-header">
+                    <div class="question-number">24</div>
+                    <div class="question-text">John sits ......... Pete in class. They are good friends.</div>
+                </div>
+                <div class="options-container">
+                    <div class="option" data-question="24" data-option="1">
+                        <div class="option-marker">A</div>
+                        <div class="option-text">on</div>
+                    </div>
+                    <div class="option" data-question="24" data-option="2">
+                        <div class="option-marker">B</div>
+                        <div class="option-text">next to</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" id="q25">
+                <div class="question-header">
+                    <div class="question-number">25</div>
+                    <div class="question-text">I put flowers ....... a vase.</div>
+                </div>
+                <div class="options-container">
+                    <div class="option" data-question="25" data-option="1">
+                        <div class="option-marker">A</div>
+                        <div class="option-text">opposite</div>
+                    </div>
+                    <div class="option" data-question="25" data-option="2">
+                        <div class="option-marker">B</div>
+                        <div class="option-text">in</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" id="q26">
+                <div class="question-header">
+                    <div class="question-number">26</div>
+                    <div class="question-text">«Where's the cat?» «She's ......... the table.»</div>
+                </div>
+                <div class="options-container">
+                    <div class="option" data-question="26" data-option="1">
+                        <div class="option-marker">A</div>
+                        <div class="option-text">between</div>
+                    </div>
+                    <div class="option" data-question="26" data-option="2">
+                        <div class="option-marker">B</div>
+                        <div class="option-text">under</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" id="q27">
+                <div class="question-header">
+                    <div class="question-number">27</div>
+                    <div class="question-text">He sits ........ the computer all day.</div>
+                </div>
+                <div class="options-container">
+                    <div class="option" data-question="27" data-option="1">
+                        <div class="option-marker">A</div>
+                        <div class="option-text">in front of</div>
+                    </div>
+                    <div class="option" data-question="27" data-option="2">
+                        <div class="option-marker">B</div>
+                        <div class="option-text">in</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" id="q28">
+                <div class="question-header">
+                    <div class="question-number">28</div>
+                    <div class="question-text">There are two paintings ........ the wall.</div>
+                </div>
+                <div class="options-container">
+                    <div class="option" data-question="28" data-option="1">
+                        <div class="option-marker">A</div>
+                        <div class="option-text">in</div>
+                    </div>
+                    <div class="option" data-question="28" data-option="2">
+                        <div class="option-marker">B</div>
+                        <div class="option-text">on</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Раздел VI: Choose the correct response -->
+        <div class="section" id="section6">
+            <div class="section-title">VI. Choose the correct response</div>
+            
+            <div class="question" id="q29">
+                <div class="question-header">
+                    <div class="question-number">29</div>
+                    <div class="question-text">Whose birthday is in winter?</div>
+                </div>
+                <div class="options-container">
+                    <div class="option" data-question="29" data-option="1">
+                        <div class="option-marker">A</div>
+                        <div class="option-text">A quarter past one.</div>
+                    </div>
+                    <div class="option" data-question="29" data-option="2">
+                        <div class="option-marker">B</div>
+                        <div class="option-text">It's John's.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" id="q30">
+                <div class="question-header">
+                    <div class="question-number">30</div>
+                    <div class="question-text">When's your birthday?</div>
+                </div>
+                <div class="options-container">
+                    <div class="option" data-question="30" data-option="1">
+                        <div class="option-marker">A</div>
+                        <div class="option-text">It's on 21<sup>st</sup> March.</div>
+                    </div>
+                    <div class="option" data-question="30" data-option="2">
+                        <div class="option-marker">B</div>
+                        <div class="option-text">Saturday!</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" id="q31">
+                <div class="question-header">
+                    <div class="question-number">31</div>
+                    <div class="question-text">What's the date today?</div>
+                </div>
+                <div class="options-container">
+                    <div class="option" data-question="31" data-option="1">
+                        <div class="option-marker">A</div>
+                        <div class="option-text">It's 19<sup>th</sup> October.</div>
+                    </div>
+                    <div class="option" data-question="31" data-option="2">
+                        <div class="option-marker">B</div>
+                        <div class="option-text">On the coffee table, please.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" id="q32">
+                <div class="question-header">
+                    <div class="question-number">32</div>
+                    <div class="question-text">What's the time, please?</div>
+                </div>
+                <div class="options-container">
+                    <div class="option" data-question="32" data-option="1">
+                        <div class="option-marker">A</div>
+                        <div class="option-text">I'm thirteen.</div>
+                    </div>
+                    <div class="option" data-question="32" data-option="2">
+                        <div class="option-marker">B</div>
+                        <div class="option-text">A quarter past one.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" id="q33">
+                <div class="question-header">
+                    <div class="question-number">33</div>
+                    <div class="question-text">What's your favourite day of the week?</div>
+                </div>
+                <div class="options-container">
+                    <div class="option" data-question="33" data-option="1">
+                        <div class="option-marker">A</div>
+                        <div class="option-text">Saturday!</div>
+                    </div>
+                    <div class="option" data-question="33" data-option="2">
+                        <div class="option-marker">B</div>
+                        <div class="option-text">It's John's.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" id="q34">
+                <div class="question-header">
+                    <div class="question-number">34</div>
+                    <div class="question-text">Where do you want the lamp?</div>
+                </div>
+                <div class="options-container">
+                    <div class="option" data-question="34" data-option="1">
+                        <div class="option-marker">A</div>
+                        <div class="option-text">On the coffee table, please.</div>
+                    </div>
+                    <div class="option" data-question="34" data-option="2">
+                        <div class="option-marker">B</div>
+                        <div class="option-text">I'm thirteen.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question" id="q35">
+                <div class="question-header">
+                    <div class="question-number">35</div>
+                    <div class="question-text">How old are you?</div>
+                </div>
+                <div class="options-container">
+                    <div class="option" data-question="35" data-option="1">
+                        <div class="option-marker">A</div>
+                        <div class="option-text">I'm thirteen.</div>
+                    </div>
+                    <div class="option" data-question="35" data-option="2">
+                        <div class="option-marker">B</div>
+                        <div class="option-text">It's on 21<sup>st</sup> March.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Раздел VII: Translate into English -->
+        <div class="section" id="section7">
+            <div class="section-title">VII. Translate into English</div>
+            
+            <div class="question" id="q36">
+                <div class="question-header">
+                    <div class="question-number">36</div>
+                    <div class="question-text">На кухне есть плита, холодильник и раковина.</div>
+                </div>
+                <input type="text" class="input-field" id="input36" placeholder="Введите перевод...">
+            </div>
+            
+            <div class="question" id="q37">
+                <div class="question-header">
+                    <div class="question-number">37</div>
+                    <div class="question-text">В гостиной есть диван.</div>
+                </div>
+                <input type="text" class="input-field" id="input37" placeholder="Введите перевод...">
+            </div>
+            
+            <div class="question" id="q38">
+                <div class="question-header">
+                    <div class="question-number">38</div>
+                    <div class="question-text">В спальне есть кровать.</div>
+                </div>
+                <input type="text" class="input-field" id="input38" placeholder="Введите перевод...">
+            </div>
+            
+            <div class="question" id="q39">
+                <div class="question-header">
+                    <div class="question-number">39</div>
+                    <div class="question-text">В ванной комнате есть ванна.</div>
+                </div>
+                <input type="text" class="input-field" id="input39" placeholder="Введите перевод...">
+            </div>
+            
+            <div class="question" id="q40">
+                <div class="question-header">
+                    <div class="question-number">40</div>
+                    <div class="question-text">В кабинете есть книжный шкаф.</div>
+                </div>
+                <input type="text" class="input-field" id="input40" placeholder="Введите перевод...">
+            </div>
+            
+            <div class="question" id="q41">
+                <div class="question-header">
+                    <div class="question-number">41</div>
+                    <div class="question-text">В столовой есть обеденный стол.</div>
+                </div>
+                <input type="text" class="input-field" id="input41" placeholder="Введите перевод...">
+            </div>
+            
+            <div class="question" id="q42">
+                <div class="question-header">
+                    <div class="question-number">42</div>
+                    <div class="question-text">Библиотека находится за автобусной остановкой.</div>
+                </div>
+                <input type="text" class="input-field" id="input42" placeholder="Введите перевод...">
+            </div>
+            
+            <div class="question" id="q43">
+                <div class="question-header">
+                    <div class="question-number">43</div>
+                    <div class="question-text">Школа находится между аптекой и банком.</div>
+                </div>
+                <input type="text" class="input-field" id="input43" placeholder="Введите перевод...">
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button class="btn btn-secondary" id="resetBtn">Сбросить тест</button>
+            <button class="btn btn-primary" id="submitBtn" disabled>Показать результаты</button>
+        </div>
+        
+        <div class="results-container" id="resultsContainer">
+            <div class="results-header">
+                <h2>Результаты теста</h2>
+            </div>
+            <div class="results-content">
+                <div class="score-display">
+                    <div class="score-number" id="scoreNumber">0</div>
+                    <div class="score-total">из 43 баллов</div>
+                </div>
+                
+                <div class="results-grid">
+                    <div class="result-item">
+                        <h4>Раздел I: Choose the odd one</h4>
+                        <div id="resultSection1">0/5 правильных ответов</div>
+                    </div>
+                    <div class="result-item">
+                        <h4>Раздел II: Write the words</h4>
+                        <div id="resultSection2">0/6 правильных ответов</div>
+                    </div>
+                    <div class="result-item">
+                        <h4>Раздел III: Underline the correct item</h4>
+                        <div id="resultSection3">0/5 правильных ответов</div>
+                    </div>
+                    <div class="result-item">
+                        <h4>Раздел IV: Complete with at, on, in</h4>
+                        <div id="resultSection4">0/5 правильных ответов</div>
+                    </div>
+                    <div class="result-item">
+                        <h4>Раздел V: Choose the correct item</h4>
+                        <div id="resultSection5">0/7 правильных ответов</div>
+                    </div>
+                    <div class="result-item">
+                        <h4>Раздел VI: Choose the correct response</h4>
+                        <div id="resultSection6">0/7 правильных ответов</div>
+                    </div>
+                    <div class="result-item">
+                        <h4>Раздел VII: Translate into English</h4>
+                        <div id="resultSection7">0/8 правильных ответов</div>
+                    </div>
+                </div>
+                
+                <div class="chart-container" id="chartContainer">
+                    <!-- Chart bars will be inserted here by JavaScript -->
+                </div>
+                
+                <div class="feedback" id="feedback">
+                    <h3>Ваш результат</h3>
+                    <p id="feedbackText">Начните тест, чтобы увидеть ваш результат.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Правильные ответы для проверки
+        const correctAnswers = {
+            // Раздел I: Choose the odd one
+            1: "3", // study (не время года)
+            2: "2", // Thursday (не месяц)
+            3: "1", // study (не комната)
+            4: "4", // ceiling (не магазин)
+            5: "2", // six (не порядковое числительное)
+            
+            // Раздел II: Write the words
+            6: "first",
+            7: "third",
+            8: "seven o'clock",
+            9: "quarter to eleven",
+            10: "half past four",
+            11: "quarter past two",
+            
+            // Раздел III: Underline the correct item
+            12: "2", // any
+            13: "2", // some
+            14: "1", // a
+            15: "2", // a
+            16: "1", // a (fridge начинается с согласного звука)
+            
+            // Раздел IV: Complete with at, on, in
+            17: "1", // at
+            18: "1", // at
+            19: "2", // on
+            20: "3", // in
+            21: "3", // in
+            
+            // Раздел V: Choose the correct item
+            22: "2", // between
+            23: "1", // on
+            24: "2", // next to
+            25: "2", // in
+            26: "2", // under
+            27: "1", // in front of
+            28: "2", // on
+            
+            // Раздел VI: Choose the correct response
+            29: "2", // It's John's.
+            30: "1", // It's on 21st March.
+            31: "1", // It's 19th October.
+            32: "2", // A quarter past one.
+            33: "1", // Saturday!
+            34: "1", // On the coffee table, please.
+            35: "1", // I'm thirteen.
+            
+            // Раздел VII: Translate into English (принимаются различные варианты)
+            36: ["There is a stove, a fridge and a sink in the kitchen.", "In the kitchen there is a stove, a fridge and a sink."],
+            37: ["There is a sofa in the living room.", "In the living room there is a sofa."],
+            38: ["There is a bed in the bedroom.", "In the bedroom there is a bed."],
+            39: ["There is a bath in the bathroom.", "In the bathroom there is a bath."],
+            40: ["There is a bookcase in the study.", "In the study there is a bookcase."],
+            41: ["There is a dining table in the dining room.", "In the dining room there is a dining table."],
+            42: ["The library is behind the bus stop.", "The library is behind a bus stop."],
+            43: ["The school is between the chemist's and the bank.", "The school is between a chemist's and a bank."]
+        };
+        
+        // Данные для хранения ответов пользователя
+        let userAnswers = {};
+        let totalQuestions = 43;
+        let completedQuestions = 0;
+        
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            // Настройка обработчиков для вариантов ответов
+            const options = document.querySelectorAll('.option');
+            options.forEach(option => {
+                option.addEventListener('click', function() {
+                    const questionNum = this.getAttribute('data-question');
+                    const optionNum = this.getAttribute('data-option');
+                    
+                    // Снимаем выделение с других вариантов в этом вопросе
+                    const otherOptions = document.querySelectorAll(`.option[data-question="${questionNum}"]`);
+                    otherOptions.forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    
+                    // Выделяем выбранный вариант
+                    this.classList.add('selected');
+                    
+                    // Сохраняем ответ
+                    userAnswers[questionNum] = optionNum;
+                    
+                    // Обновляем прогресс
+                    updateProgress();
+                });
+            });
+            
+            // Настройка обработчиков для полей ввода
+            const inputFields = document.querySelectorAll('.input-field');
+            inputFields.forEach(field => {
+                field.addEventListener('input', function() {
+                    const questionNum = this.id.replace('input', '');
+                    userAnswers[questionNum] = this.value.trim();
+                    
+                    // Обновляем прогресс
+                    updateProgress();
+                });
+            });
+            
+            // Кнопка отправки
+            document.getElementById('submitBtn').addEventListener('click', showResults);
+            
+            // Кнопка сброса
+            document.getElementById('resetBtn').addEventListener('click', resetTest);
+            
+            // Инициализация прогресса
+            updateProgress();
+        });
+        
+        // Обновление прогресса выполнения теста
+        function updateProgress() {
+            // Подсчитываем заполненные вопросы
+            completedQuestions = 0;
+            
+            // Проверяем вопросы с вариантами ответов
+            for (let i = 1; i <= 35; i++) {
+                if (userAnswers[i]) completedQuestions++;
+            }
+            
+            // Проверяем вопросы с полями ввода
+            for (let i = 36; i <= 43; i++) {
+                if (userAnswers[i] && userAnswers[i].length > 0) completedQuestions++;
+            }
+            
+            // Обновляем индикатор прогресса
+            const progressPercent = Math.round((completedQuestions / totalQuestions) * 100);
+            document.getElementById('progressFill').style.width = `${progressPercent}%`;
+            document.getElementById('progressText').textContent = `${progressPercent}%`;
+            document.getElementById('completedCount').textContent = `${completedQuestions} из ${totalQuestions} заданий`;
+            
+            // Активируем/деактивируем кнопку отправки
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = (completedQuestions < totalQuestions);
+        }
+        
+        // Показать результаты теста
+        function showResults() {
+            let score = 0;
+            let sectionScores = [0, 0, 0, 0, 0, 0, 0]; // Для каждого раздела
+            
+            // Проверяем вопросы с вариантами ответов (1-35)
+            for (let i = 1; i <= 35; i++) {
+                const userAnswer = userAnswers[i];
+                const correctAnswer = correctAnswers[i];
+                
+                if (userAnswer === correctAnswer) {
+                    score++;
+                    
+                    // Обновляем счет для соответствующего раздела
+                    updateSectionScore(i, true);
+                    
+                    // Показываем правильный ответ
+                    highlightCorrectAnswer(i, userAnswer);
+                } else if (userAnswer) {
+                    // Показываем правильный ответ и ошибку пользователя
+                    highlightIncorrectAnswer(i, userAnswer, correctAnswer);
+                    updateSectionScore(i, false);
+                }
+            }
+            
+            // Проверяем вопросы с переводами (36-43)
+            for (let i = 36; i <= 43; i++) {
+                const userAnswer = userAnswers[i];
+                const correctAnswerOptions = correctAnswers[i];
+                
+                if (userAnswer) {
+                    // Проверяем, совпадает ли ответ с одним из правильных вариантов
+                    let isCorrect = false;
+                    const userAnswerLower = userAnswer.toLowerCase();
+                    
+                    for (const correctOption of correctAnswerOptions) {
+                        if (userAnswerLower === correctOption.toLowerCase()) {
+                            isCorrect = true;
+                            break;
+                        }
+                    }
+                    
+                    // Также принимаем ответы с незначительными отличиями
+                    if (!isCorrect) {
+                        // Проверяем наличие ключевых слов
+                        const keyWords = getKeyWordsForQuestion(i);
+                        let hasAllKeyWords = true;
+                        
+                        for (const word of keyWords) {
+                            if (!userAnswerLower.includes(word)) {
+                                hasAllKeyWords = false;
+                                break;
+                            }
+                        }
+                        
+                        if (hasAllKeyWords) {
+                            isCorrect = true;
+                        }
+                    }
+                    
+                    if (isCorrect) {
+                        score++;
+                        updateSectionScore(i, true);
+                        document.getElementById(`input${i}`).classList.add('correct');
+                    } else {
+                        updateSectionScore(i, false);
+                        document.getElementById(`input${i}`).classList.add('incorrect');
+                    }
+                }
+            }
+            
+            // Обновляем отображение результатов
+            document.getElementById('scoreNumber').textContent = score;
+            document.getElementById('resultSection1').textContent = `${sectionScores[0]}/5 правильных ответов`;
+            document.getElementById('resultSection2').textContent = `${sectionScores[1]}/6 правильных ответов`;
+            document.getElementById('resultSection3').textContent = `${sectionScores[2]}/5 правильных ответов`;
+            document.getElementById('resultSection4').textContent = `${sectionScores[3]}/5 правильных ответов`;
+            document.getElementById('resultSection5').textContent = `${sectionScores[4]}/7 правильных ответов`;
+            document.getElementById('resultSection6').textContent = `${sectionScores[5]}/7 правильных ответов`;
+            document.getElementById('resultSection7').textContent = `${sectionScores[6]}/8 правильных ответов`;
+            
+            // Создаем диаграмму
+            createChart(sectionScores);
+            
+            // Генерируем обратную связь
+            generateFeedback(score, sectionScores);
+            
+            // Показываем контейнер с результатами
+            document.getElementById('resultsContainer').style.display = 'block';
+            
+            // Прокручиваем к результатам
+            document.getElementById('resultsContainer').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Обновление счета для раздела
+        function updateSectionScore(questionNum, isCorrect) {
+            const sectionIndex = getSectionIndex(questionNum);
+            const sectionScoresElement = document.getElementById(`resultSection${sectionIndex + 1}`);
+            
+            if (!sectionScoresElement._score) {
+                sectionScoresElement._score = 0;
+            }
+            
+            if (isCorrect) {
+                sectionScoresElement._score++;
+            }
+        }
+        
+        // Получение индекса раздела по номеру вопроса
+        function getSectionIndex(questionNum) {
+            if (questionNum <= 5) return 0; // Раздел I
+            if (questionNum <= 11) return 1; // Раздел II
+            if (questionNum <= 16) return 2; // Раздел III
+            if (questionNum <= 21) return 3; // Раздел IV
+            if (questionNum <= 28) return 4; // Раздел V
+            if (questionNum <= 35) return 5; // Раздел VI
+            return 6; // Раздел VII
+        }
+        
+        // Подсветка правильного ответа
+        function highlightCorrectAnswer(questionNum, userAnswer) {
+            const option = document.querySelector(`.option[data-question="${questionNum}"][data-option="${userAnswer}"]`);
+            if (option) {
+                option.classList.add('correct');
+            }
+        }
+        
+        // Подсветка неправильного ответа и правильного варианта
+        function highlightIncorrectAnswer(questionNum, userAnswer, correctAnswer) {
+            // Подсвечиваем неправильный ответ пользователя
+            const userOption = document.querySelector(`.option[data-question="${questionNum}"][data-option="${userAnswer}"]`);
+            if (userOption) {
+                userOption.classList.add('incorrect');
+            }
+            
+            // Подсвечиваем правильный ответ
+            const correctOption = document.querySelector(`.option[data-question="${questionNum}"][data-option="${correctAnswer}"]`);
+            if (correctOption) {
+                correctOption.classList.add('correct');
+            }
+        }
+        
+        // Получение ключевых слов для вопросов с переводом
+        function getKeyWordsForQuestion(questionNum) {
+            const keyWordsMap = {
+                36: ["kitchen", "stove", "fridge", "sink"],
+                37: ["living", "room", "sofa"],
+                38: ["bedroom", "bed"],
+                39: ["bathroom", "bath"],
+                40: ["study", "bookcase"],
+                41: ["dining", "room", "table"],
+                42: ["library", "behind", "bus", "stop"],
+                43: ["school", "between", "chemist", "bank"]
+            };
+            
+            return keyWordsMap[questionNum] || [];
+        }
+        
+        // Создание диаграммы результатов
+        function createChart(sectionScores) {
+            const chartContainer = document.getElementById('chartContainer');
+            chartContainer.innerHTML = '';
+            
+            const sectionTitles = [
+                "Раздел I", "Раздел II", "Раздел III", "Раздел IV", 
+                "Раздел V", "Раздел VI", "Раздел VII"
+            ];
+            
+            const sectionMaxScores = [5, 6, 5, 5, 7, 7, 8];
+            
+            // Создаем колонки для диаграммы
+            for (let i = 0; i < sectionScores.length; i++) {
+                const percentage = (sectionScores[i] / sectionMaxScores[i]) * 100;
+                
+                const chartBar = document.createElement('div');
+                chartBar.className = 'chart-bar';
+                chartBar.style.height = `${percentage}%`;
+                
+                const chartLabel = document.createElement('div');
+                chartLabel.className = 'chart-label';
+                chartLabel.textContent = `${sectionScores[i]}/${sectionMaxScores[i]}`;
+                
+                chartBar.appendChild(chartLabel);
+                chartContainer.appendChild(chartBar);
+            }
+        }
+        
+        // Генерация обратной связи
+        function generateFeedback(score, sectionScores) {
+            const feedbackText = document.getElementById('feedbackText');
+            const percentage = Math.round((score / totalQuestions) * 100);
+            
+            let feedback = '';
+            
+            if (percentage >= 90) {
+                feedback = `Отличный результат! Вы набрали ${score} из ${totalQuestions} баллов (${percentage}%). Вы отлично усвоили материал Module 2.`;
+            } else if (percentage >= 70) {
+                feedback = `Хороший результат! Вы набрали ${score} из ${totalQuestions} баллов (${percentage}%). Вы хорошо знаете материал, но есть над чем поработать.`;
+            } else if (percentage >= 50) {
+                feedback = `Удовлетворительный результат. Вы набрали ${score} из ${totalQuestions} баллов (${percentage}%). Рекомендуем повторить материал Module 2.`;
+            } else {
+                feedback = `Результат ниже среднего. Вы набрали ${score} из ${totalQuestions} баллов (${percentage}%). Вам необходимо повторить материал Module 2.`;
+            }
+            
+            // Добавляем рекомендации по разделам
+            feedback += '<br><br><strong>Рекомендации:</strong><ul>';
+            
+            const sectionNames = [
+                "Choose the odd one",
+                "Write the words as in the example",
+                "Underline the correct item",
+                "Complete with at, on, in",
+                "Choose the correct item",
+                "Choose the correct response",
+                "Translate into English"
+            ];
+            
+            for (let i = 0; i < sectionScores.length; i++) {
+                const sectionPercentage = Math.round((sectionScores[i] / [5, 6, 5, 5, 7, 7, 8][i]) * 100);
+                
+                if (sectionPercentage < 70) {
+                    feedback += `<li>Обратите внимание на раздел "${sectionNames[i]}" (${sectionPercentage}% правильных ответов)</li>`;
+                }
+            }
+            
+            if (feedback.includes('<li>')) {
+                feedback += '</ul>';
+            } else {
+                feedback = feedback.replace('<ul>', '');
+                feedback += '<br>Все разделы выполнены хорошо!';
+            }
+            
+            feedbackText.innerHTML = feedback;
+        }
+        
+        // Сброс теста
+        function resetTest() {
+            // Сброс ответов пользователя
+            userAnswers = {};
+            completedQuestions = 0;
+            
+            // Сброс выбранных вариантов
+            const options = document.querySelectorAll('.option');
+            options.forEach(option => {
+                option.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Очистка полей ввода
+            const inputFields = document.querySelectorAll('.input-field');
+            inputFields.forEach(field => {
+                field.value = '';
+                field.classList.remove('correct', 'incorrect');
+            });
+            
+            // Скрытие результатов
+            document.getElementById('resultsContainer').style.display = 'none';
+            
+            // Сброс прогресса
+            updateProgress();
+            
+            // Прокрутка к началу теста
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
